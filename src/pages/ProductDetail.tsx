@@ -350,7 +350,7 @@ const ProductDetail: React.FC = () => {
                                         ))}
                                     </div>
                                     <h3 className="text-sm font-medium text-gray-900">
-                                        {review.profiles?.full_name || 'Anonymous'}
+                                        {review.profile_info?.full_name || 'Anonymous'}
                                     </h3>
                                     <time className="text-sm text-gray-500">
                                         {new Date(review.created_at).toLocaleDateString()}

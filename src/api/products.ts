@@ -123,22 +123,39 @@ export const getProductDetails = async (id: string) => {
         throw imagesError;
     }
 
-    // Get product reviews
+    // Get product reviews (without joining profiles)
     const { data: reviews, error: reviewsError } = await supabase
         .from('reviews')
-        .select(`
-      id,
-      rating,
-      comment,
-      created_at,
-      user_id,
-      profiles!user_id(full_name)
-    `)
+        .select('*')
         .eq('product_id', id)
         .order('created_at', { ascending: false });
 
     if (reviewsError) {
         throw reviewsError;
+    }
+
+    // Fetch profile information separately for reviews if there are any reviews
+    let reviewsWithProfiles = [...reviews];
+    if (reviews.length > 0) {
+        // Get unique user IDs from reviews
+        const userIds = [...new Set(reviews.map(review => review.user_id))];
+
+        // Fetch profiles for these users
+        const { data: profiles, error: profilesError } = await supabase
+            .from('profiles')
+            .select('id, full_name')
+            .in('id', userIds);
+
+        if (!profilesError && profiles) {
+            // Map profiles to reviews
+            reviewsWithProfiles = reviews.map(review => {
+                const profile = profiles.find(p => p.id === review.user_id);
+                return {
+                    ...review,
+                    profile_info: profile || null
+                };
+            });
+        }
     }
 
     // Calculate average rating
@@ -150,7 +167,7 @@ export const getProductDetails = async (id: string) => {
         ...product,
         variations,
         images,
-        reviews,
+        reviews: reviewsWithProfiles,
         avgRating,
     };
 };
@@ -169,24 +186,42 @@ export const getCategories = async () => {
 };
 
 export const getProductReviews = async (productId: string) => {
-    const { data, error } = await supabase
+    // Get reviews without joining profiles
+    const { data: reviews, error: reviewsError } = await supabase
         .from('reviews')
-        .select(`
-      id,
-      rating,
-      comment,
-      created_at,
-      user_id,
-      profiles!user_id(full_name)
-    `)
+        .select('*')
         .eq('product_id', productId)
         .order('created_at', { ascending: false });
 
-    if (error) {
-        throw error;
+    if (reviewsError) {
+        throw reviewsError;
     }
 
-    return data;
+    // Fetch profile information separately
+    let reviewsWithProfiles = [...reviews];
+    if (reviews.length > 0) {
+        // Get unique user IDs from reviews
+        const userIds = [...new Set(reviews.map(review => review.user_id))];
+
+        // Fetch profiles for these users
+        const { data: profiles, error: profilesError } = await supabase
+            .from('profiles')
+            .select('id, full_name')
+            .in('id', userIds);
+
+        if (!profilesError && profiles) {
+            // Map profiles to reviews
+            reviewsWithProfiles = reviews.map(review => {
+                const profile = profiles.find(p => p.id === review.user_id);
+                return {
+                    ...review,
+                    profile_info: profile || null
+                };
+            });
+        }
+    }
+
+    return reviewsWithProfiles;
 };
 
 export const addProductReview = async ({
