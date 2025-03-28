@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "supabase-remote": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-postgres", "postgres://postgres:NxGCT3bpWsjKEU0B@frzydyzynsyrtdftowqo.supabase.co:5432/postgres"]
+    },
+    "supabase-local": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-postgres", "postgres://postgres:postgres@127.0.0.1:54322/postgres"]
+    }
+  }
+} 

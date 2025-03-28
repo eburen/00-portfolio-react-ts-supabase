@@ -36,4 +36,20 @@
   .card {
     @apply bg-white rounded-lg shadow-sm overflow-hidden;
   }
+}
+
+/* Spinner animation for loading states */
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  border-top-color: #6366f1;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 } 
