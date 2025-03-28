@@ -398,6 +398,9 @@ export interface Database {
                     name: string
                     price: number
                     stock: number
+                    category_id: string | null
+                    is_featured: boolean
+                    created_at: string
                     category: string | null
                     review_count: number | null
                     avg_rating: number | null

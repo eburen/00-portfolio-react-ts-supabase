@@ -197,8 +197,8 @@ const ProductList: React.FC = () => {
                                         key={index}
                                         onClick={() => setPage(index + 1)}
                                         className={`w-10 h-10 flex items-center justify-center rounded-md transition-colors ${page === index + 1
-                                                ? 'bg-indigo-600 text-white'
-                                                : 'border hover:bg-gray-50'
+                                            ? 'bg-indigo-600 text-white'
+                                            : 'border hover:bg-gray-50'
                                             }`}
                                     >
                                         {index + 1}

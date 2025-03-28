@@ -1,3 +1,4 @@
+
 -- Schema definition for e-commerce store portfolio
 -- Enable UUID extension
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
@@ -159,6 +160,9 @@ SELECT
   p.name,
   p.price,
   p.stock,
+  p.category_id,
+  p.is_featured,
+  p.created_at,
   c.name AS category,
   (SELECT COUNT(*) FROM public.reviews r WHERE r.product_id = p.id) AS review_count,
   (SELECT AVG(r.rating) FROM public.reviews r WHERE r.product_id = p.id) AS avg_rating,
