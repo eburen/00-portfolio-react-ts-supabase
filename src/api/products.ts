@@ -41,14 +41,18 @@ export const getProducts = async (options?: {
                 query = query.order('price', { ascending: false });
                 break;
             case 'newest':
-                query = query.order('created_at', { ascending: false });
+                query = query.order('id', { ascending: false });
                 break;
             case 'popular':
                 query = query.order('avg_rating', { ascending: false, nullsFirst: false });
                 break;
             default:
+                query = query.order('id', { ascending: false });
                 break;
         }
+    } else {
+        // Default sorting by ID (newest first)
+        query = query.order('id', { ascending: false });
     }
 
     // Apply pagination
@@ -124,7 +128,8 @@ export const getProductDetails = async (id: string) => {
         .from('reviews')
         .select(`
       *,
-      user:profiles(full_name)
+      user:user_id(id),
+      profile:user_id(profiles(full_name))
     `)
         .eq('product_id', id)
         .order('created_at', { ascending: false });
@@ -165,7 +170,8 @@ export const getProductReviews = async (productId: string) => {
         .from('reviews')
         .select(`
       *,
-      user:profiles(full_name)
+      user:user_id(id),
+      profile:user_id(profiles(full_name))
     `)
         .eq('product_id', productId)
         .order('created_at', { ascending: false });
