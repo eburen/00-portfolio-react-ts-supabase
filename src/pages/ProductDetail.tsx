@@ -110,6 +110,7 @@ const ProductDetail: React.FC = () => {
             setAddToCartError(null);
 
             await addToCart({
+                userId: user.id,
                 productId: id!,
                 quantity,
                 variations: selectedVariations
@@ -349,7 +350,7 @@ const ProductDetail: React.FC = () => {
                                         ))}
                                     </div>
                                     <h3 className="text-sm font-medium text-gray-900">
-                                        {review.profile?.full_name || 'Anonymous'}
+                                        {review.profiles?.full_name || 'Anonymous'}
                                     </h3>
                                     <time className="text-sm text-gray-500">
                                         {new Date(review.created_at).toLocaleDateString()}

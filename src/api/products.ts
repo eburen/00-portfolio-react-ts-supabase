@@ -127,9 +127,12 @@ export const getProductDetails = async (id: string) => {
     const { data: reviews, error: reviewsError } = await supabase
         .from('reviews')
         .select(`
-      *,
-      user:user_id(id),
-      profile:user_id(profiles(full_name))
+      id,
+      rating,
+      comment,
+      created_at,
+      user_id,
+      profiles!user_id(full_name)
     `)
         .eq('product_id', id)
         .order('created_at', { ascending: false });
@@ -169,9 +172,12 @@ export const getProductReviews = async (productId: string) => {
     const { data, error } = await supabase
         .from('reviews')
         .select(`
-      *,
-      user:user_id(id),
-      profile:user_id(profiles(full_name))
+      id,
+      rating,
+      comment,
+      created_at,
+      user_id,
+      profiles!user_id(full_name)
     `)
         .eq('product_id', productId)
         .order('created_at', { ascending: false });
